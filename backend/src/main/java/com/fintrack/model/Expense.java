@@ -44,7 +44,7 @@ public class Expense {
     @Column(name = "is_anomaly")
     private Boolean isAnomaly = false;
 
-    @Column(name = "anomaly_score", precision = 5, scale = 4)
+    @Column(name = "anomaly_score", precision = 10, scale = 4)
     private BigDecimal anomalyScore;
 
     @Column(name = "anomaly_explanation", length = 500)

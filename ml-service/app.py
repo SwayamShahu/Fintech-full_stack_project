@@ -256,24 +256,34 @@ def predict_anomaly():
         }
         
         ml_anomaly_type = anomaly_type_mapping.get(
-            prediction['anomaly_type'], 
+            prediction['anomaly_type'],
             'ML_DETECTED'
         ) if prediction['is_anomaly'] else None
-        
-        return jsonify({
-            'is_anomaly': prediction['is_anomaly'],
-            'anomaly_score': round(prediction['final_score'], 4),
+
+        response_data = {
+            'is_anomaly': bool(prediction['is_anomaly']),
+            'anomaly_score': float(prediction['final_score']),
             'anomaly_type': ml_anomaly_type,
             'severity': prediction['severity'],
             'explanation': explanation,
             'model_scores': {
-                'isolation_forest': round(prediction['model_scores']['isolation_forest'], 4),
-                'autoencoder': round(prediction['model_scores']['autoencoder'], 4),
-                'lstm': round(prediction['model_scores']['lstm'], 4)
+                'isolation_forest': float(prediction['model_scores']['isolation_forest']),
+                'autoencoder': float(prediction['model_scores']['autoencoder']),
+                'lstm': float(prediction['model_scores']['lstm'])
             },
             'weights_used': prediction['weights']
-        })
+        }
         
+        # Log the detailed prediction to the terminal before sending it to the backend
+        print("\n" + "="*50)
+        print(f"📊 ML PREDICTION FOR USER {user_id} - ${data['amount']}")
+        print("="*50)
+        import json
+        print(json.dumps(response_data, indent=4))
+        print("="*50 + "\n")
+
+        return jsonify(response_data)
+
     except Exception as e:
         logger.error(f"Prediction error: {e}", exc_info=True)
         return jsonify({
