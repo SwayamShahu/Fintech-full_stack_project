@@ -50,6 +50,9 @@ public class Expense {
     @Column(name = "anomaly_explanation", length = 500)
     private String anomalyExplanation;
 
+    @Column(name = "anomaly_type", length = 50)
+    private String anomalyType;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

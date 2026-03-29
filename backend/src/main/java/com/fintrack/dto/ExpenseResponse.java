@@ -24,6 +24,7 @@ public class ExpenseResponse {
     private Boolean isAnomaly;
     private BigDecimal anomalyScore;
     private String anomalyExplanation;
+    private String anomalyType;
     private LocalDateTime createdAt;
     
     public ExpenseResponse(Expense expense) {
@@ -40,6 +41,7 @@ public class ExpenseResponse {
         this.isAnomaly = expense.getIsAnomaly();
         this.anomalyScore = expense.getAnomalyScore();
         this.anomalyExplanation = expense.getAnomalyExplanation();
+        this.anomalyType = expense.getAnomalyType();
         this.createdAt = expense.getCreatedAt();
     }
 }

@@ -178,9 +178,30 @@ export default function Expenses() {
                                             <div className="flex items-center gap-2">
                                                 <p className="font-medium text-gray-900">{expense.categoryName}</p>
                                                 {expense.isAnomaly && (
-                                                    <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                                    <span className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${expense.anomalyType === 'HIGH_COST' ? 'bg-red-100 text-red-600' :
+                                                        expense.anomalyType === 'CATEGORY_SPIKE' ? 'bg-orange-100 text-orange-600' :
+                                                            expense.anomalyType === 'HIGH_FREQUENCY' ? 'bg-yellow-100 text-yellow-700' :
+                                                                expense.anomalyType === 'POTENTIAL_DUPLICATE' ? 'bg-purple-100 text-purple-600' :
+                                                                    expense.anomalyType === 'WEEKLY_FREQUENCY_SPIKE' ? 'bg-blue-100 text-blue-600' :
+                                                                        expense.anomalyType === 'UNUSUAL_CATEGORY' ? 'bg-teal-100 text-teal-600' :
+                                                                            expense.anomalyType === 'ML_GLOBAL_PATTERN' ? 'bg-indigo-100 text-indigo-600' :
+                                                                                expense.anomalyType === 'ML_PERSONAL_DEVIATION' ? 'bg-pink-100 text-pink-600' :
+                                                                                    expense.anomalyType === 'ML_TEMPORAL_PATTERN' ? 'bg-cyan-100 text-cyan-600' :
+                                                                                        expense.anomalyType === 'ML_DETECTED' ? 'bg-violet-100 text-violet-600' :
+                                                                                            'bg-orange-100 text-orange-600'
+                                                        }`}>
                                                         <AlertTriangle size={12} />
-                                                        Anomaly
+                                                        {expense.anomalyType === 'HIGH_COST' ? 'High Cost' :
+                                                            expense.anomalyType === 'CATEGORY_SPIKE' ? 'Category Spike' :
+                                                                expense.anomalyType === 'HIGH_FREQUENCY' ? 'High Frequency' :
+                                                                    expense.anomalyType === 'POTENTIAL_DUPLICATE' ? 'Duplicate?' :
+                                                                        expense.anomalyType === 'WEEKLY_FREQUENCY_SPIKE' ? 'Weekly Spike' :
+                                                                            expense.anomalyType === 'UNUSUAL_CATEGORY' ? 'Unusual Category' :
+                                                                                expense.anomalyType === 'ML_GLOBAL_PATTERN' ? '🤖 Global' :
+                                                                                    expense.anomalyType === 'ML_PERSONAL_DEVIATION' ? '🧠 Personal' :
+                                                                                        expense.anomalyType === 'ML_TEMPORAL_PATTERN' ? '⏱️ Temporal' :
+                                                                                            expense.anomalyType === 'ML_DETECTED' ? '🤖 ML' :
+                                                                                                'Anomaly'}
                                                     </span>
                                                 )}
                                             </div>

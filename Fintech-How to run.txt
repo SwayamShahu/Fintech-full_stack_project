@@ -1,0 +1,30 @@
+Step 1: Start Backend
+# Open PowerShell and navigate to project
+cd "C:\Users\Swayam\Desktop\Fintech\backend"
+
+# Switch to Java 17 (Required!)
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-17"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+
+# Verify Java version
+java -version
+# Should show: java version "17.0.11"
+
+# Start the backend
+java -jar target/fintrack-pro-1.0.0.jar
+
+# Open new PowerShell window and navigate to frontend
+cd "C:\Users\Swayam\Desktop\Fintech\frontend"
+
+Step 2
+# Start the frontend
+npm run dev
+
+
+Other info
+ Database Configuration
+Host: localhost:3306
+Database: fintrack_db
+Username: root
+Password: swayam2004
+Auto-created tables: users, categories, expenses, recurring_expenses

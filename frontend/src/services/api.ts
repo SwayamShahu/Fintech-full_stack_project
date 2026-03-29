@@ -118,6 +118,7 @@ export interface Expense {
     isAnomaly: boolean;
     anomalyScore: number | null;
     anomalyExplanation: string | null;
+    anomalyType: string | null;
     createdAt: string;
 }
 

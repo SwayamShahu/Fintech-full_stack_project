@@ -274,7 +274,35 @@ export default function Dashboard() {
                                     <AlertTriangle className="text-orange-500 flex-shrink-0 mt-0.5" size={20} />
                                     <div className="flex-1">
                                         <div className="flex items-center justify-between">
-                                            <p className="font-medium text-gray-900">{expense.categoryName}</p>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-medium text-gray-900">{expense.categoryName}</p>
+                                                {expense.anomalyType && (
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${expense.anomalyType === 'HIGH_COST' ? 'bg-red-100 text-red-700' :
+                                                        expense.anomalyType === 'CATEGORY_SPIKE' ? 'bg-orange-100 text-orange-700' :
+                                                            expense.anomalyType === 'HIGH_FREQUENCY' ? 'bg-yellow-100 text-yellow-700' :
+                                                                expense.anomalyType === 'POTENTIAL_DUPLICATE' ? 'bg-purple-100 text-purple-700' :
+                                                                    expense.anomalyType === 'WEEKLY_FREQUENCY_SPIKE' ? 'bg-blue-100 text-blue-700' :
+                                                                        expense.anomalyType === 'UNUSUAL_CATEGORY' ? 'bg-teal-100 text-teal-700' :
+                                                                            expense.anomalyType === 'ML_GLOBAL_PATTERN' ? 'bg-indigo-100 text-indigo-700' :
+                                                                                expense.anomalyType === 'ML_PERSONAL_DEVIATION' ? 'bg-pink-100 text-pink-700' :
+                                                                                    expense.anomalyType === 'ML_TEMPORAL_PATTERN' ? 'bg-cyan-100 text-cyan-700' :
+                                                                                        expense.anomalyType === 'ML_DETECTED' ? 'bg-violet-100 text-violet-700' :
+                                                                                            'bg-gray-100 text-gray-700'
+                                                        }`}>
+                                                        {expense.anomalyType === 'HIGH_COST' ? '💰 High Cost' :
+                                                            expense.anomalyType === 'CATEGORY_SPIKE' ? '📈 Category Spike' :
+                                                                expense.anomalyType === 'HIGH_FREQUENCY' ? '🔄 High Frequency' :
+                                                                    expense.anomalyType === 'POTENTIAL_DUPLICATE' ? '⚠️ Duplicate?' :
+                                                                        expense.anomalyType === 'WEEKLY_FREQUENCY_SPIKE' ? '📅 Weekly Spike' :
+                                                                            expense.anomalyType === 'UNUSUAL_CATEGORY' ? '🆕 Unusual Category' :
+                                                                                expense.anomalyType === 'ML_GLOBAL_PATTERN' ? '🤖 Global Pattern' :
+                                                                                    expense.anomalyType === 'ML_PERSONAL_DEVIATION' ? '🧠 Personal Deviation' :
+                                                                                        expense.anomalyType === 'ML_TEMPORAL_PATTERN' ? '⏱️ Temporal Pattern' :
+                                                                                            expense.anomalyType === 'ML_DETECTED' ? '🤖 ML Detected' :
+                                                                                                expense.anomalyType}
+                                                    </span>
+                                                )}
+                                            </div>
                                             <span className="font-semibold text-orange-600">${expense.amount.toFixed(2)}</span>
                                         </div>
                                         <p className="text-sm text-gray-600 mt-1">{expense.anomalyExplanation}</p>

@@ -44,4 +44,19 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     
     @Query("SELECT AVG(e.amount) FROM Expense e WHERE e.user.id = :userId")
     BigDecimal getAverageByUserId(@Param("userId") Long userId);
+
+    @Query("SELECT AVG(e.amount) FROM Expense e WHERE e.user.id = :userId AND e.category.id = :categoryId")
+    BigDecimal getAverageByCategoryAndUserId(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
+
+    @Query("SELECT COUNT(e) FROM Expense e WHERE e.user.id = :userId AND e.category.id = :categoryId AND e.expenseDate = :expenseDate")
+    Long countSameDaySameCategory(@Param("userId") Long userId, @Param("categoryId") Long categoryId, @Param("expenseDate") LocalDate expenseDate);
+
+    @Query("SELECT e FROM Expense e WHERE e.user.id = :userId AND e.expenseDate = :expenseDate AND e.category.id = :categoryId AND ABS(e.amount - :amount) < :threshold")
+    List<Expense> findPotentialDuplicates(@Param("userId") Long userId, @Param("expenseDate") LocalDate expenseDate, @Param("categoryId") Long categoryId, @Param("amount") BigDecimal amount, @Param("threshold") BigDecimal threshold);
+
+    @Query("SELECT COUNT(e) FROM Expense e WHERE e.user.id = :userId AND e.category.id = :categoryId")
+    Long countByCategoryAndUserId(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
+
+    @Query("SELECT COUNT(e) FROM Expense e WHERE e.user.id = :userId AND e.expenseDate BETWEEN :startDate AND :endDate AND e.category.id = :categoryId")
+    Long countByUserAndCategoryInDateRange(@Param("userId") Long userId, @Param("categoryId") Long categoryId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

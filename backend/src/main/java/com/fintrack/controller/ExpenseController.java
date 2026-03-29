@@ -5,6 +5,7 @@ import com.fintrack.dto.ExpenseRequest;
 import com.fintrack.dto.ExpenseResponse;
 import com.fintrack.security.CustomUserDetails;
 import com.fintrack.service.ExpenseService;
+import com.fintrack.service.MLAnomalyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -22,6 +24,7 @@ import java.util.List;
 public class ExpenseController {
 
     private final ExpenseService expenseService;
+    private final MLAnomalyService mlAnomalyService;
 
     @PostMapping
     public ResponseEntity<ApiResponse> createExpense(
@@ -108,5 +111,13 @@ public class ExpenseController {
             return ResponseEntity.badRequest()
                     .body(new ApiResponse(false, e.getMessage()));
         }
+    }
+
+    @GetMapping("/ml-status")
+    public ResponseEntity<ApiResponse> getMLServiceStatus() {
+        Map<String, Object> status = mlAnomalyService.getServiceStatus();
+        boolean healthy = mlAnomalyService.isServiceHealthy();
+        status.put("healthy", healthy);
+        return ResponseEntity.ok(new ApiResponse(true, "ML service status", status));
     }
 }
