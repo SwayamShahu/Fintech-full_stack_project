@@ -7,7 +7,8 @@ import {
     LogOut,
     Menu,
     X,
-    Wallet
+    Wallet,
+    Bell
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -25,6 +26,7 @@ export default function Layout() {
         { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
         { to: '/expenses', icon: Receipt, label: 'Expenses' },
         { to: '/recurring', icon: RefreshCw, label: 'Recurring' },
+        { to: '/notifications', icon: Bell, label: 'Notifications' },
     ];
 
     return (

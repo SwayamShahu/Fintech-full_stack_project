@@ -106,7 +106,21 @@ public class RecurringExpenseController {
     public ResponseEntity<ApiResponse> processRecurringExpensesNow() {
         try {
             recurringExpenseService.processRecurringExpenses();
-            return ResponseEntity.ok(new ApiResponse(true, "Recurring expenses processed"));
+            return ResponseEntity.ok(new ApiResponse(true, "Recurring expenses processed and notifications created (DEMO MODE)"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse(false, e.getMessage()));
+        }
+    }
+
+    @PostMapping("/{id}/approve")
+    public ResponseEntity<ApiResponse> approveRecurringExpense(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long id,
+            @RequestParam(defaultValue = "true") boolean approved) {
+        try {
+            recurringExpenseService.processRecurringExpenseApproval(userDetails.getId(), id, approved);
+            return ResponseEntity.ok(new ApiResponse(true, approved ? "Expense approved and recorded" : "Expense skipped for this cycle"));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest()
                     .body(new ApiResponse(false, e.getMessage()));

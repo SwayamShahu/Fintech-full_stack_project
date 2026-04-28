@@ -65,6 +65,24 @@ export const recurringApi = {
         api.put(`/recurring-expenses/${id}`, data),
     deactivate: (id: number) => api.patch(`/recurring-expenses/${id}/deactivate`),
     delete: (id: number) => api.delete(`/recurring-expenses/${id}`),
+    approve: (id: number, approved: boolean = true) =>
+        api.post(`/recurring-expenses/${id}/approve?approved=${approved}`),
+    processNow: () => api.post('/recurring-expenses/process-now'),
+};
+
+// Notification APIs
+export const notificationApi = {
+    getAll: () => api.get('/notifications'),
+    getUnread: () => api.get('/notifications/unread'),
+    getActive: () => api.get('/notifications/active'),
+    getUnreadCount: () => api.get('/notifications/count'),
+    markAsRead: (id: number) => api.patch(`/notifications/${id}/read`),
+    takeAction: (id: number, action: NotificationAction) =>
+        api.post(`/notifications/${id}/action`, { action }),
+    updateSettings: (settings: NotificationSettings) =>
+        api.put('/notifications/settings', settings),
+    clearAll: () => api.delete('/notifications/clear'),
+    triggerCheck: () => api.post('/notifications/trigger-check'),
 };
 
 // Category APIs
@@ -134,6 +152,36 @@ export interface RecurringExpense {
     nextDueDate: string;
     isActive: boolean;
     createdAt: string;
+}
+
+export interface Notification {
+    id: number;
+    title: string;
+    message: string;
+    status: NotificationStatus;
+    type: NotificationType;
+    dueDate: string;
+    notificationTime: string;
+    actionTakenAt?: string;
+    actionTaken?: string;
+    recurringExpenseId: number;
+    categoryName: string;
+    categoryIcon: string;
+    categoryColor: string;
+    recurringExpenseDescription: string;
+    amount: number;
+    frequency: string;
+    createdAt: string;
+}
+
+export type NotificationStatus = 'UNREAD' | 'READ' | 'DONE' | 'LEFT' | 'SKIPPED' | 'EXPIRED';
+export type NotificationType = 'PAYMENT_DUE' | 'PAYMENT_OVERDUE' | 'RECURRING_CREATED' | 'RECURRING_UPDATED';
+export type NotificationAction = 'DONE' | 'LEFT' | 'SKIPPED';
+
+export interface NotificationSettings {
+    notificationHourOfDay?: number;
+    notificationMinute?: number;
+    enableNotifications?: boolean;
 }
 
 export default api;

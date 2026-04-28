@@ -28,6 +28,15 @@ public class User {
     @Column(length = 15)
     private String phone;
 
+    @Column(name = "notification_hour")
+    private Integer notificationHourOfDay = 9; // Default 9 AM
+
+    @Column(name = "notification_minute")
+    private Integer notificationMinute = 0;
+
+    @Column(name = "enable_notifications")
+    private Boolean enableNotifications = true;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

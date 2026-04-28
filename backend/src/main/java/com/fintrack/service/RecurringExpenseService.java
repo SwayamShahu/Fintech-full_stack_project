@@ -11,6 +11,7 @@ import com.fintrack.repository.CategoryRepository;
 import com.fintrack.repository.ExpenseRepository;
 import com.fintrack.repository.RecurringExpenseRepository;
 import com.fintrack.repository.UserRepository;
+import com.fintrack.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,6 +31,7 @@ public class RecurringExpenseService {
     private final ExpenseRepository expenseRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public RecurringExpenseResponse createRecurringExpense(Long userId, RecurringExpenseRequest request) {
@@ -117,12 +119,29 @@ public class RecurringExpenseService {
     @Scheduled(cron = "0 0 0 * * ?") // Run daily at midnight
     @Transactional
     public void processRecurringExpenses() {
-        log.info("Processing recurring expenses...");
+        log.info("Scheduled: Processing recurring expenses and creating notifications...");
         LocalDate today = LocalDate.now();
         List<RecurringExpense> dueExpenses = recurringExpenseRepository
                 .findByNextDueDateLessThanEqualAndIsActiveTrue(today);
 
         for (RecurringExpense recurring : dueExpenses) {
+            // Create notification for user to approve
+            notificationService.createNotificationForDueRecurringExpense(recurring, today);
+            log.info("Created notification for recurring expense ID: {} for user: {}", 
+                    recurring.getId(), recurring.getUser().getId());
+        }
+    }
+
+    @Transactional
+    public void processRecurringExpenseApproval(Long userId, Long recurringExpenseId, boolean approved) {
+        RecurringExpense recurring = recurringExpenseRepository.findById(recurringExpenseId)
+                .orElseThrow(() -> new RuntimeException("Recurring expense not found"));
+
+        if (!recurring.getUser().getId().equals(userId)) {
+            throw new RuntimeException("Unauthorized access");
+        }
+
+        if (approved) {
             // Create actual expense
             Expense expense = Expense.builder()
                     .user(recurring.getUser())
@@ -134,14 +153,12 @@ public class RecurringExpenseService {
                     .build();
 
             expenseRepository.save(expense);
-
-            // Update next due date
-            recurring.setNextDueDate(calculateNextDueDate(recurring.getNextDueDate(), recurring.getFrequency()));
-            recurringExpenseRepository.save(recurring);
-
-            log.info("Processed recurring expense ID: {} for user: {}", 
-                    recurring.getId(), recurring.getUser().getId());
+            log.info("Approved and created expense for recurring expense ID: {}", recurringExpenseId);
         }
+
+        // Update next due date regardless of approval
+        recurring.setNextDueDate(calculateNextDueDate(recurring.getNextDueDate(), recurring.getFrequency()));
+        recurringExpenseRepository.save(recurring);
     }
 
     private LocalDate calculateNextDueDate(LocalDate currentDate, Frequency frequency) {

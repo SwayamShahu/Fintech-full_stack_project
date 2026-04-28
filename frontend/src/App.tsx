@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Expenses from './pages/Expenses';
 import RecurringExpenses from './pages/RecurringExpenses';
+import Notifications from './pages/Notifications';
 import Layout from './components/Layout';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
@@ -49,6 +50,7 @@ function App() {
                         <Route path="dashboard" element={<Dashboard />} />
                         <Route path="expenses" element={<Expenses />} />
                         <Route path="recurring" element={<RecurringExpenses />} />
+                        <Route path="notifications" element={<Notifications />} />
                     </Route>
                 </Routes>
             </Router>
