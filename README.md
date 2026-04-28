@@ -103,14 +103,21 @@ The ML service provides advanced anomaly detection. Without it, the system uses 
 
 ```bash
 cd ml-service
+
+# 1. Create and configure your environment variables
+cp .env.example .env
+# Edit .env to ensure DB_PASSWORD and other credentials match your MySQL database
+
+# 2. Install Python dependencies
 pip install -r requirements.txt
 
-# Train models (requires expense data in database)
+# 3. Generate dummy data (Required for initial model training)
+python generate_dummy_data.py
+
+# 4. Train the ML models (Isolation Forest, LSTM, Autoencoders)
 python train.py
 
-# OR train on Kaggle using train_kaggle.ipynb
-
-# Start the service
+# 5. Start the ML Flask service
 python app.py
 ```
 

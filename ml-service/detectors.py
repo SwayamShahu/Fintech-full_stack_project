@@ -10,8 +10,8 @@ import os
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 import tensorflow as tf
-from tensorflow.keras.models import Model, Sequential, load_model
-from tensorflow.keras.layers import Input, Dense, LSTM, Dropout, RepeatVector, TimeDistributed
+from keras.models import Model, Sequential, load_model
+from keras.layers import Input, Dense, LSTM, Dropout, RepeatVector, TimeDistributed
 
 from config import Config
 
